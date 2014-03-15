@@ -1,0 +1,193 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="utf-8">
+    <!--<script src="plugins/plugin-loader.js"></script>-->
+    <!--<link rel="stylesheet" href="plugins/plugin-loader.css">-->
+
+    <!--===== LIBRARIES =====-->
+    <script type="text/javascript" src="lib/jquery/jquery-1.10.1.js"></script>
+    <script type="text/javascript" src="lib/cryptojs/aes.js"></script>
+    <script type="text/javascript" src="lib/cryptojs/sha512.js"></script>
+    <script type="text/javascript" src="lib/smart-2.10.min.js"></script>
+
+    <!--===== SCRIPTS =====-->
+    <script type="text/javascript" src="js/Main.js"></script>
+    <script type="text/javascript" src="js/Cryptic.js"></script>
+    <script type="text/javascript" src="js/PageHandler.js"></script>
+    <script type="text/javascript" src="js/Storage.js"></script>
+    <script type="text/javascript" src="js/Overview.js"></script>
+    <script type="text/javascript" src="js/NewLoginData.js"></script>
+    <script type="text/javascript" src="js/Detail.js"></script>
+    <!--<script type="text/javascript" src="js/Main.js"></script>-->
+    <!--<script type="text/javascript" src="js/App/Utils/Storage.js"></script>-->
+    <!--<script type="text/javascript" src="js/App/Services/PageHandler.js"></script>-->
+    <!--<script type="text/javascript" src="js/App/Pages/Overview.js"></script>-->
+    <!--<script type="text/javascript" src="js/App/Pages/NewLoginData.js"></script>-->
+    <!--<script type="text/javascript" src="js/App/Pages/Detail.js"></script>-->
+    <script>
+        $(document).ready(init);
+
+    </script>
+
+
+    <!--===== Styles =====-->
+    <link rel="stylesheet" href="lib/bootstrap/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+    <!-- welcome page -->
+    <div id="welcome">
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <h1>Login Manager</h1>
+
+                <div id="passwordIsset" class="passwordContent form-group">
+                    <label for="passwordInput">
+                        Dein Passwort oder dein Passwortsatz, um deine gespeicherten Logindaten zu entschlüsseln:
+                    </label>
+                    <p id="wrong-password-p">
+                        Falsches Passwort !
+                    </p>
+                    <textarea id="passwordInput" class="form-control" rows="3"></textarea>
+                    <button id="submitPassword" type="button" class="btn btn-primary">Fertig</button>
+                </div>
+
+                <div id="passwordIsNull" class="passwordContent form-group">
+                    <label for="newPasswordInput">
+                        Gebe hier entweder ein Wort oder Satz ein, um deine Passwörter zu verschlüsseln.
+                        <p class="blue">Vergiss dieses Wort oder diesen Satz auf gar keinen Fall, denn man kann deine Logindaten ohne dein Lösungswort oder -satz nicht ohne Weiteres entschlüsseln. </p>
+                        ( Bei einem Satz ist die Verschlüsselung deiner gespeicherten Daten sicherer )
+                    </label>
+                    <textarea id="newPasswordInput" class="form-control" rows="3"></textarea>
+                    <button id="savePassword" type="button" class="btn btn-primary">Speichern</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- navi -->
+    <script id="navi-template" type="text/x-jsmart-tmpl">
+        {if $page == 'overview'}
+            <div id="overview-config" onclick="Overview.showConfig()" class="left navigator">
+                <span class="optionButton glyphicon glyphicon-cog"></span>
+            </div>
+            <div id="navigationTitle">
+                <span id="pageTitle">Logins</span>
+            </div>
+            <div id="overview-add" onclick="PageHandler.changePageTo('newLoginData')" class="right navigator">
+                <span class="optionButton glyphicon glyphicon-plus-sign"></span>
+            </div>
+
+        {elseif $page == 'detail'}
+            <div onclick="PageHandler.changePageTo('overview')" class="back-to-overview left navigator">
+                <span class="optionButton glyphicon glyphicon-circle-arrow-left"></span>
+            </div>
+            <div id="navigationTitle">
+                <span id="pageTitle">{$pageTitle}</span>
+            </div>
+            <div onclick="Detail.editLogin()" class="right navigator">
+                <span class="optionButton glyphicon glyphicon-pencil"></span>
+            </div>
+
+        {elseif $page == 'newLoginData'}
+            <div onclick="PageHandler.changePageTo('overview')" class="back-to-overview left navigator">
+                <span class="optionButton glyphicon glyphicon-circle-arrow-left"></span>
+            </div>
+            <div id="navigationTitle">
+                <span id="pageTitle">Neue Login-Datei</span>
+            </div>
+        {/if}
+    </script>
+    <div id="navi"></div>
+
+    <!-- overview page -->
+	<div id="overview" class="content">
+
+        <script id="overview-template" type="text/x-jsmart-tmpl">
+            {foreach $logins as $login}
+                <li data-title="{$login.title}" data-id="{$login.id}" class="list-group-item">
+                    <div class="title">
+                        {$login.title}
+                    </div>
+                    <div onclick="Storage.removeLoginFromStorage({$login.id})" class="remove-button">
+                        <span class="glyphicon glyphicon-remove-circle"></span>
+                    </div>
+                    <div class="clearfix"></div>
+                </li>
+            {foreachelse}
+                <div class="info-text">
+                    <span>Sie haben noch keine Passwörter/Login-Daten hinzugefügt. </span>
+                    <a onclick="PageHandler.changePageTo('newLoginData')">Fügen Sie welche hinzu</a>
+                </div>
+            {/foreach}
+        </script>
+	    <div id="login-wrapper">
+
+	    </div>
+    </div>
+
+    <!-- detail site for a login info -->
+    <div id="detail" class="content">
+	    <script id="detail-template" type="text/x-jsmart-tmpl">
+		    <div class="panel panel-primary">
+			    <div class="panel-heading"> <h3 class="panel-title">Titel des Logins: </h3> </div>
+			    <div class="panel-body"> {$title} </div>
+		    </div>
+		    {if $username != ''}
+			    <div class="panel panel-primary">
+				    <div class="panel-heading"> <h3 class="panel-title">Username für den Login: </h3> </div>
+				    <div class="panel-body"> {$username} </div>
+			    </div>
+		    {/if}
+
+		    {if $email != ''}
+			    <div class="panel panel-primary">
+				    <div class="panel-heading"> <h3 class="panel-title">E-Mail-Addresse für den Login: </h3> </div>
+				    <div class="panel-body"> {$email} </div>
+			    </div>
+		    {/if}
+		    <div class="panel panel-primary">
+			    <div class="panel-heading"> <h3 class="panel-title">Passwort für den Login: </h3> </div>
+			    <div class="panel-body"> {$password} </div>
+		    </div>
+		    {if $description != ''}
+			    <div class="panel panel-primary">
+				    <div class="panel-heading"> <h3 class="panel-title">Beschreibung: </h3> </div>
+				    <div class="panel-body"> {$description} </div>
+			    </div>
+		    {/if}
+		</script>
+	    <div id="details-wrapper">
+
+	    </div>
+    </div>
+
+    <!-- page for adding new login info -->
+    <div id="newLoginData" class="content">
+        <div class="page-content-wrapper form-group">
+
+	        <label for="loginTitle">Der Titel des Logins: <i class="required">*</i></label>
+            <input id="loginTitle" type="text" class="form-control" placeholder="Titel">
+
+            <label for="username">Der Username für den Login: </label>
+            <input id="username" type="text" class="form-control" placeholder="Username">
+
+            <label for="email">Die eMail für den Login: </label>
+            <input id="email" type="email" class="form-control" placeholder="EMail">
+
+            <label for="login-password">Das Passwort für den Login: <i class="required">*</i></label>
+            <input id="login-password" type="text" class="form-control" placeholder="Passwort">
+
+            <label for="description">Eine Beschreibung für den Login: </label>
+            <textarea id="description" class="form-control" placeholder="Beschreibung" rows="3"></textarea>
+
+	        <button id="submitNewLoginData" type="button" class="btn btn-primary">Speichern</button>
+	        <button id="submitEditedLogin" type="button" class="btn btn-primary">Ändern</button>
+        </div>
+    </div>
+
+</body>
+</html>
+
