@@ -14,9 +14,21 @@ var Overview = {
         // todo: suchfunktion
     },
 
+    hideConfig: function() {
+        $('#content-wrapper').css('margin-left', '0px');
+        setTimeout(function(){
+            $('#config-div').hide();
+            $('#content-wrapper').off('click', this.hideConfig);
+        }.bind(this), 1000);
+    },
 
     showConfig: function() {
-        alert(" TODO: edit config menu ");
+        $('#content-wrapper').css('margin-left', '200px');
+        $('#config-div').show();
+        setTimeout(function(){
+            $('#content-wrapper').on('click', this.hideConfig);
+        }.bind(this), 1000);
+//        alert(" TODO: edit config menu  ");
         // TODO: edit config menu
     },
 

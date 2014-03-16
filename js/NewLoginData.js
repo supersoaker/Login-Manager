@@ -14,6 +14,7 @@ var NewLoginData = {
         this._container = $('#newLoginData');
         $('#submitNewLoginData').on('click', this._addNewLoginData.bind(this));
         $('#submitEditedLogin').on('click', this._saveEditedLogin.bind(this));
+        $('#password-generator').on('click', this._generatePassword.bind(this));
     },
 
     editLogin: function( login ) {
@@ -25,6 +26,31 @@ var NewLoginData = {
         $('#submitNewLoginData').hide();
         $('#submitEditedLogin').show();
         this._editedLogin = login;
+    },
+
+    _generatePassword: function() {
+        var config  = Main.config.pwGeneratorConfig,
+            length  = 8,
+            retVal  = "",
+            charset = "abcdefghijklnopqrstuvwxyz";
+        if( config.capitals ){
+            charset += "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        }
+        if( config.numbers ){
+            charset += "0123456789";
+        }
+        if( config.specifics ){
+            charset += "!@#_";
+        }
+        if( config.length !== 0 ){
+            length = config.length;
+        }
+
+        for (var i = 0, n = charset.length; i < length; ++i) {
+            retVal += charset.charAt(Math.floor(Math.random() * n));
+        }
+
+        this._container.find('#login-password').val( retVal );
     },
 
     _getLoginFromInputs: function() {

@@ -10,16 +10,31 @@ var Main = {
     config: {
         sessionInterval: 0,
         sessionSeconds: 0,
-        userSession: 120 //seconds
+        userSession: 120, //seconds
+        pwGeneratorConfig: {
+            // länge des passworts
+            length: 0,
+            // sonderzeichen
+            specifics: false,
+            // zahlen
+            numbers: true,
+            // großbuchstaben
+            capitals: true
+        }
     },
     password: '',
+    naviStructure: '',
 
 
     init: function() {
         this._startSessionInterval();
         this._checkIfStorageContainsPassword();
 
+        this.naviStructure = $('#navi-template').text();
+
         $('.content').css( 'height', (window.innerHeight - 50) );
+        $('#overlay').css( 'width', (window.innerWidth - 40) );
+        $('#overlay').css( 'height', (window.innerHeight - 40) );
 
         PageHandler.init();
         Overview.init();
@@ -38,7 +53,7 @@ var Main = {
             page: page,
             pageTitle: naviTitle
         };
-        var text = $('#navi-template').text();
+        var text = this.naviStructure;
         var tpl = new jSmart( text );
         var res = tpl.fetch( data );
         $('#navi').html( res );
@@ -76,6 +91,7 @@ var Main = {
             this.config.sessionSeconds++;
             if( this.config.sessionSeconds === this.config.userSession ){
                 this.password = '';
+                Overview.hideConfig();
                 PageHandler.changePageTo('welcome');
             }
         }.bind(this), 1000 );
