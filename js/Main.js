@@ -9,7 +9,8 @@ var Main = {
 
     config: {
         sessionInterval: 0,
-        sessionSeconds: 0
+        sessionSeconds: 0,
+        userSession: 30
     },
     password: '',
     naviStructure: '',
@@ -31,7 +32,7 @@ var Main = {
         NewLoginData.init();
         Config.init();
 
-        $('body').on('click', this._updateSessionInterval.bind(this));
+        $('body').on('click', this.updateSessionInterval.bind(this));
 
         $('#savePassword').on('click', this._savePassword.bind(this));
         $('#submitPassword').on('click', this._checkIfPasswordIsCorrect.bind(this));
@@ -67,7 +68,7 @@ var Main = {
      * Update the session interval, because the user is already active
      * @private
      */
-    _updateSessionInterval: function() {
+    updateSessionInterval: function() {
         clearInterval( this.config.sessionInterval );
         this.config.sessionSeconds = 0;
         this._startSessionInterval();
@@ -80,7 +81,7 @@ var Main = {
     _startSessionInterval: function() {
         this.config.sessionInterval = setInterval( function(){
             this.config.sessionSeconds++;
-            if( this.config.sessionSeconds === Config.userConfig.userSession ){
+            if( this.config.sessionSeconds === this.config.userSession ){
                 this.resetApplication();
             }
         }.bind(this), 1000 );
@@ -88,7 +89,10 @@ var Main = {
 
     resetApplication: function() {
         this.password = '';
-        $('#content-wrapper').hide();
+        $('#passwordInput').val("");
+        $('#newPasswordInput').val("");
+        $('#config-div').hide();
+        $('#overlay').hide();
         Overview.hideConfig();
         PageHandler.changePageTo('welcome');
     },
@@ -102,6 +106,8 @@ var Main = {
         var hash      = Cryptic.getHash(this.password);
         Storage.setPropToStorage('passwordHash', hash);
         PageHandler.changePageTo('overview');
+        $('#passwordIsset').show();
+        $('#passwordIsNull').hide();
     },
 
     /**

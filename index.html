@@ -48,7 +48,7 @@
         </div>
         <div class="clearfix"></div>
         <div id="overlay-wrapper">
-            <div id="pw-generator-config">
+            <div id="timeout-configpw-generator-config">
                 <script id="generator-config-template" type="text/x-jsmart-tmpl">
                     <p>
                         Geben Sie hier Ihre Konfigurationen zum Generieren eines Passwortes an:
@@ -96,7 +96,24 @@
             </div>
 
             <div id="timeout-config">
-
+                <script id="timeout-config-template" type="text/x-jsmart-tmpl">
+                    <p>
+                        Geben Sie hier an, nach wie vielen Minuten Sie automatisch ausgeloggt werden, wenn Sie diese App gerade nicht benutzen.
+                    </p>
+                    <ul class="list-group">
+                        <li class="list-group-item">
+                            <label>
+                                Minuten:
+                                <input style="margin-left: 23px;" step="any" type="number" id="timeout-min-input" max="15" min="0" onkeyup="Config.updateTimeout('minutes', this.value)" value="{$minutes}" />
+                            </label>
+                            <br />
+                            <label>
+                                Sekunden:
+                                <input step="any" type="number" id="timeout-sec-input" max="60" min="0" onkeyup="Config.updateTimeout('seconds', this.value)" value="{$seconds}" />
+                            </label>
+                        </li>
+                    </ul>
+                </script>
             </div>
         </div>
     </div>
@@ -104,9 +121,10 @@
     <!-- the div behind the content-wrapper -->
     <div id="config-div">
         <ul class="nav nav-pills nav-stacked">
-            <li><a href="#">Importieren</a></li>
+            <li><a href="#">Passwörter importieren</a></li>
+            <li><a href="#">Passwörter exportieren</a></li>
             <li><a onclick="Config.showPwGeneratorConfigs()" href="#">Passwort-Generator</a></li>
-            <li><a onclick="Config.showDialog( '#timeout-config' )" href="#">Sitzungsablauf</a></li>
+            <li><a onclick="Config.showTimeoutConfigs()" href="#">Sitzungsablauf</a></li>
         </ul>
     </div>
 
@@ -118,7 +136,7 @@
 
                 <div id="passwordIsset" class="passwordContent form-group">
                     <label for="passwordInput">
-                        Dein Passwort oder dein Passwortsatz, um deine gespeicherten Logindaten zu entschlüsseln:
+                        Ihr Passwort oder Passwortsatz, um Ihre gespeicherten Logindaten zu entschlüsseln:
                     </label>
                     <p id="wrong-password-p">
                         Falsches Passwort !
@@ -129,8 +147,8 @@
 
                 <div id="passwordIsNull" class="passwordContent form-group">
                     <label for="newPasswordInput">
-                        Gebe hier entweder ein Wort oder Satz ein, um deine Passwörter zu verschlüsseln.
-                        <p class="blue">Vergiss dieses Wort oder diesen Satz auf gar keinen Fall, denn man kann deine Logindaten ohne dein Lösungswort oder -satz nicht ohne Weiteres entschlüsseln. </p>
+                        Geben Sie hier entweder ein Wort oder Satz ein, um Ihre Passwörter zu verschlüsseln.
+                        <p class="blue">Vergessen Sie dieses Wort bzw. diesen Satz auf gar keinen Fall, denn man kann deine Logindaten ohne Ihr Lösungswort oder -satz nicht entschlüsseln. </p>
                         ( Bei einem Satz ist die Verschlüsselung deiner gespeicherten Daten sicherer )
                     </label>
                     <textarea id="newPasswordInput" class="form-control" rows="3"></textarea>

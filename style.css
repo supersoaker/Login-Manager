@@ -53,7 +53,7 @@ i.required {
 #pw-generator-config input[type="range"] {
     /*margin: 0 0 10px;*/
 }
-#pw-generator-config input[type="number"] {
+input[type="number"] {
     width: 50px;
     margin-left: 10px;
 }
@@ -149,9 +149,10 @@ i.required {
 
     /*<editor-fold desc="#welcome">*/
     #welcome {
-        margin: 50px auto;
+        padding: 10px;
+        margin: 0 auto;
         max-width: 550px;
-        min-width: 250px;
+        min-width: 300px;
     }
     .passwordContent {
         display: none;

@@ -6,7 +6,10 @@ var Config = {
 
     // default user-configs
     userConfig: {
-        userSession: 30, //seconds
+        userSession: {
+            minutes: 0,
+            seconds: 30
+        },
         pwGeneratorConfig: {
             // länge des passworts
             length: 8,
@@ -23,14 +26,15 @@ var Config = {
 
     init: function() {
         this._templates.generator = $('#generator-config-template').text();
+        this._templates.timeout   = $('#timeout-config-template').text();
 
         for ( var config in this.userConfig ){
             if( this.userConfig.hasOwnProperty(config) ){
                 this.userConfig[ config ]
                     = Storage.getPropFromStorage( config, this.userConfig[ config ] );
+                Storage.setPropToStorage( config, this.userConfig[ config ] );
             }
         }
-        // todo: config in storage speichern
     },
 
     _currentOverlay: "",
@@ -49,6 +53,16 @@ var Config = {
             Storage.setPropToStorage('pwGeneratorConfig', this.userConfig.pwGeneratorConfig);
         }
 
+        // timeoutConfigs
+        if( this._currentOverlay === "#timeout-config" ){
+            var secs = parseInt(this.userConfig.userSession.seconds),
+                mins = parseInt(this.userConfig.userSession.minutes),
+                interv = (secs + mins * 60);
+            Main.config.userSession = interv;
+            Main.updateSessionInterval();
+            Storage.setPropToStorage('userSession', this.userConfig.userSession);
+        }
+
 
         $('#overlay').hide();
     },
@@ -60,13 +74,15 @@ var Config = {
 
     showPwGeneratorConfigs: function() {
         var divId   = '#pw-generator-config',
-            tpl     = new jSmart( this._templates.generator),
+            data    = this._templates.generator,
+            tpl     = new jSmart( data ),
             newHtml = tpl.fetch( this.userConfig.pwGeneratorConfig );
         $( divId ).html( newHtml );
         this._currentOverlay = divId;
         this._currentConfig = "pwGeneratorConfig";
         this.showDialog( divId, "Passwort Konfigurationen");
     },
+
     updatePwLength: function( elem ) {
         if( elem.value === "" ){ return; }
         var newLength = parseInt( elem.value );
@@ -77,6 +93,28 @@ var Config = {
 
         $('#pw-length-input').val( newLength );
         $('#pw-length-range').val( newLength );
+    },
+
+
+    showTimeoutConfigs: function() {
+        var divId   = '#timeout-config',
+            data    = this._templates.timeout,
+            tpl     = new jSmart( data ),
+            newHtml = tpl.fetch( this.userConfig.userSession );
+
+        $( divId ).html( newHtml );
+        this._currentOverlay = divId;
+        this._currentConfig = "userSession";
+        this.showDialog( divId, "Ablauf der Sitzung");
+    },
+
+    updateTimeout: function( action, num ) {
+        if( action === "seconds" ){
+            this.userConfig.userSession.seconds = num;
+        } else
+        if ( action === "minutes" ) {
+            this.userConfig.userSession.minutes = num;
+        }
     },
 
     showDialog: function( divId, headline ) {
