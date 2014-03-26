@@ -29,7 +29,7 @@ var NewLoginData = {
     },
 
     _generatePassword: function() {
-        var config  = Main.config.pwGeneratorConfig,
+        var config  = Config.userConfig.pwGeneratorConfig,
             length  = 8,
             retVal  = "",
             charset = "abcdefghijklnopqrstuvwxyz";

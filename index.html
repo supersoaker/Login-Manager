@@ -3,6 +3,8 @@
 <head>
     <meta charset="utf-8">
     <!--<script src="plugins/plugin-loader.js"></script>-->
+    <!--<meta name="viewport" content="width=device-width, user-scalable=no">-->
+    <meta name="viewport" content="width=device-width; initial-scale=1, maximum-scale=1">
     <!--<link rel="stylesheet" href="plugins/plugin-loader.css">-->
 
     <!--===== LIBRARIES =====-->
@@ -40,12 +42,62 @@
 
     <!-- the overlay div -->
     <div id="overlay">
+        <h3 id="overlay-headline"></h3>
         <div onclick="Config.hideOverlay()" id="hide-overlay">
             <span class="glyphicon glyphicon-remove-circle"></span>
         </div>
         <div class="clearfix"></div>
         <div id="overlay-wrapper">
-            sdgdsgsdg
+            <div id="pw-generator-config">
+                <script id="generator-config-template" type="text/x-jsmart-tmpl">
+                    <p>
+                        Geben Sie hier Ihre Konfigurationen zum Generieren eines Passwortes an:
+                    </p>
+                    <ul class="list-group">
+                        <li class="list-group-item">
+                            <label>
+                                Länge des Passwortes:
+                                <input type="number" id="pw-length-input" max="20" min="3" onkeyup="Config.updatePwLength(this)" value="{$length}" />
+                            </label>
+                            <input type="range" id="pw-length-range" onchange="Config.updatePwLength(this)" max="20" min="3" value="{$length}" name="slider">
+                        </li>
+                        <li class="list-group-item">
+                            <label>
+                                {if( {$specifics} == true )}
+                                <input onclick="Config.triggerConfig(this.name)" type="checkbox" name="specifics" checked />
+                                {else}
+                                <input onclick="Config.triggerConfig(this.name)" type="checkbox" name="specifics" />
+                                {/if}
+                                Sonderzeichen ( !@#_ )
+                            </label>
+                        </li>
+                        <li class="list-group-item">
+                            <label>
+                                {if( {$numbers} == true )}
+                                <input onclick="Config.triggerConfig(this.name)" type="checkbox" name="numbers" checked />
+                                {else}
+                                <input onclick="Config.triggerConfig(this.name)" type="checkbox" name="numbers" />
+                                {/if}
+                                Nummern ( 0-9 )
+                            </label>
+                        </li>
+                        <li class="list-group-item">
+                            <label>
+                                {if( {$capitals} == true )}
+                                <input onclick="Config.triggerConfig(this.name)" type="checkbox" name="capitals" checked />
+                                {else}
+                                <input onclick="Config.triggerConfig(this.name)" type="checkbox" name="capitals" />
+                                {/if}
+                                Großbuchstaben ( A-Z )
+                            </label>
+                        </li>
+                    </ul>
+                </script>
+            </div>
+
+            <div id="timeout-config">
+
+            </div>
         </div>
     </div>
 
@@ -53,42 +105,44 @@
     <div id="config-div">
         <ul class="nav nav-pills nav-stacked">
             <li><a href="#">Importieren</a></li>
-            <li><a onclick="Config.showPwGeneratorDialog()" href="#">Passwort-Generator</a></li>
+            <li><a onclick="Config.showPwGeneratorConfigs()" href="#">Passwort-Generator</a></li>
+            <li><a onclick="Config.showDialog( '#timeout-config' )" href="#">Sitzungsablauf</a></li>
         </ul>
     </div>
 
-    <!-- the content wrapper -->
-    <div id="content-wrapper">
+    <!-- welcome page -->
+    <div id="welcome">
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <h1>Login Manager</h1>
 
-        <!-- welcome page -->
-        <div id="welcome">
-            <div class="panel panel-default">
-                <div class="panel-body">
-                    <h1>Login Manager</h1>
+                <div id="passwordIsset" class="passwordContent form-group">
+                    <label for="passwordInput">
+                        Dein Passwort oder dein Passwortsatz, um deine gespeicherten Logindaten zu entschlüsseln:
+                    </label>
+                    <p id="wrong-password-p">
+                        Falsches Passwort !
+                    </p>
+                    <textarea id="passwordInput" class="form-control" rows="3"></textarea>
+                    <button id="submitPassword" type="button" class="btn btn-primary">Fertig</button>
+                </div>
 
-                    <div id="passwordIsset" class="passwordContent form-group">
-                        <label for="passwordInput">
-                            Dein Passwort oder dein Passwortsatz, um deine gespeicherten Logindaten zu entschlüsseln:
-                        </label>
-                        <p id="wrong-password-p">
-                            Falsches Passwort !
-                        </p>
-                        <textarea id="passwordInput" class="form-control" rows="3"></textarea>
-                        <button id="submitPassword" type="button" class="btn btn-primary">Fertig</button>
-                    </div>
-
-                    <div id="passwordIsNull" class="passwordContent form-group">
-                        <label for="newPasswordInput">
-                            Gebe hier entweder ein Wort oder Satz ein, um deine Passwörter zu verschlüsseln.
-                            <p class="blue">Vergiss dieses Wort oder diesen Satz auf gar keinen Fall, denn man kann deine Logindaten ohne dein Lösungswort oder -satz nicht ohne Weiteres entschlüsseln. </p>
-                            ( Bei einem Satz ist die Verschlüsselung deiner gespeicherten Daten sicherer )
-                        </label>
-                        <textarea id="newPasswordInput" class="form-control" rows="3"></textarea>
-                        <button id="savePassword" type="button" class="btn btn-primary">Speichern</button>
-                    </div>
+                <div id="passwordIsNull" class="passwordContent form-group">
+                    <label for="newPasswordInput">
+                        Gebe hier entweder ein Wort oder Satz ein, um deine Passwörter zu verschlüsseln.
+                        <p class="blue">Vergiss dieses Wort oder diesen Satz auf gar keinen Fall, denn man kann deine Logindaten ohne dein Lösungswort oder -satz nicht ohne Weiteres entschlüsseln. </p>
+                        ( Bei einem Satz ist die Verschlüsselung deiner gespeicherten Daten sicherer )
+                    </label>
+                    <textarea id="newPasswordInput" class="form-control" rows="3"></textarea>
+                    <button id="savePassword" type="button" class="btn btn-primary">Speichern</button>
                 </div>
             </div>
         </div>
+    </div>
+
+
+    <!-- the content wrapper -->
+    <div id="content-wrapper">
 
         <!-- navi -->
         <div id="navi">

@@ -27,14 +27,17 @@ var PageHandler = {
                 $prevPage   = $('#'+ prevPage),
                 $nextPage   = $('#'+ pageTitle);
             if( prevPage === 'welcome' ) {
+                $('#content-wrapper').show();
                 $('#navi').show();
             }
             if( pageTitle === 'welcome' ){
+                $('#content-wrapper').hide();
                 $('#navi').hide();
             }
             if( pageTitle === 'overview' ){
                 Overview.updateOverviewPage();
             }
+            $('.error').removeClass('error');
             Main.updateNavi( pageTitle, pageParams );
 
             $prevPage.hide();

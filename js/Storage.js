@@ -42,6 +42,11 @@ var Storage = {
         }
     },
 
+    /**
+     * function to get a login by id
+     * @param {int} loginId - the id of the wanted login
+     * @returns {Object}
+     */
     getLoginById: function( loginId ) {
         var logins          = this.getPropFromStorage('logins'),
             loginPosInArr   = loginId- 1,
@@ -62,7 +67,6 @@ var Storage = {
         if( deleteAnswer ){
             logins.splice( loginPosInArr, 1 );
             this.setPropToStorage( 'logins', logins );
-            // alert( login.title + " wurde erfolgreich gelöscht." );
             PageHandler.changePageTo('overview');
         } else {
             PageHandler.changePageTo('overview');
@@ -86,6 +90,7 @@ var Storage = {
      * @returns {*} - the variable from the storage
      */
     getPropFromStorage: function(prop, defaultParam) {
+        defaultParam = ( typeof defaultParam === "undefined" ) ? {} : defaultParam;
         if(this._cache[prop]){
             return this._cache[prop];
         } else {
@@ -94,6 +99,10 @@ var Storage = {
         }
     },
 
+    /**
+     * function to get the whole storage
+     * @returns {Array} - the current cached storage
+     */
     getStorage: function() {
         return this._cache;
     }

@@ -26,9 +26,14 @@ i.required {
     background: none repeat scroll 0 0 #FFFFFF;
     margin: 20px;
     position: fixed;
-    z-index: 1;
+    z-index: 2;
     display: none;
     box-shadow: 0 0 15px 0 #000000;
+}
+#overlay-headline {
+    float: left;
+    margin: 20px 0 0 15px;
+    max-width: 200px;
 }
 #hide-overlay {
     float: right;
@@ -39,6 +44,20 @@ i.required {
 #overlay-wrapper {
     padding: 15px;
 }
+#overlay-wrapper .list-group-item {
+    padding: 15px 15px 10px;
+}
+#pw-generator-config label {
+    /*border-bottom: 1px solid #dddddd;*/
+}
+#pw-generator-config input[type="range"] {
+    /*margin: 0 0 10px;*/
+}
+#pw-generator-config input[type="number"] {
+    width: 50px;
+    margin-left: 10px;
+}
+
 /*</editor-fold>*/
 
 
@@ -60,10 +79,13 @@ i.required {
 
 /*<editor-fold desc="#content-wrapper">*/
 #content-wrapper {
+    position: relative;
     height: 100%;
     box-shadow: 5px 0 10px 5px #000000;
-    position: absolute;
+    /*position: absolute;*/
     width: 100%;
+    z-index: 1;
+    display: none;
     -webkit-transition: margin-left 1s linear 0s;
     -moz-transition: margin-left 1s linear 0s;
     -ms-transition: margin-left 1s linear 0s;
@@ -127,7 +149,8 @@ i.required {
 
     /*<editor-fold desc="#welcome">*/
     #welcome {
-        margin: 20px;
+        margin: 50px auto;
+        max-width: 550px;
         min-width: 250px;
     }
     .passwordContent {
@@ -153,6 +176,7 @@ i.required {
     }
 
     #overview .list-group-item {
+        background: none;
         padding: 0;
         clear: both;
     }

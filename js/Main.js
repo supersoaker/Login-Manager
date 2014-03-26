@@ -9,18 +9,7 @@ var Main = {
 
     config: {
         sessionInterval: 0,
-        sessionSeconds: 0,
-        userSession: 120, //seconds
-        pwGeneratorConfig: {
-            // länge des passworts
-            length: 0,
-            // sonderzeichen
-            specifics: false,
-            // zahlen
-            numbers: true,
-            // großbuchstaben
-            capitals: true
-        }
+        sessionSeconds: 0
     },
     password: '',
     naviStructure: '',
@@ -33,12 +22,14 @@ var Main = {
         this.naviStructure = $('#navi-template').text();
 
         $('.content').css( 'height', (window.innerHeight - 50) );
+//        $('body').css( 'width', (window.innerWidth - 40) );
         $('#overlay').css( 'width', (window.innerWidth - 40) );
         $('#overlay').css( 'height', (window.innerHeight - 40) );
 
         PageHandler.init();
         Overview.init();
         NewLoginData.init();
+        Config.init();
 
         $('body').on('click', this._updateSessionInterval.bind(this));
 
@@ -89,12 +80,17 @@ var Main = {
     _startSessionInterval: function() {
         this.config.sessionInterval = setInterval( function(){
             this.config.sessionSeconds++;
-            if( this.config.sessionSeconds === this.config.userSession ){
-                this.password = '';
-                Overview.hideConfig();
-                PageHandler.changePageTo('welcome');
+            if( this.config.sessionSeconds === Config.userConfig.userSession ){
+                this.resetApplication();
             }
         }.bind(this), 1000 );
+    },
+
+    resetApplication: function() {
+        this.password = '';
+        $('#content-wrapper').hide();
+        Overview.hideConfig();
+        PageHandler.changePageTo('welcome');
     },
 
     /**
