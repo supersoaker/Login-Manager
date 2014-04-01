@@ -17,9 +17,9 @@ var Main = {
 
 
     init: function() {
+		Config.updateMainConfig();
         this._startSessionInterval();
         this._checkIfStorageContainsPassword();
-
         this.naviStructure = $('#navi-template').text();
 
         $('.content').css( 'height', (window.innerHeight - 50) );

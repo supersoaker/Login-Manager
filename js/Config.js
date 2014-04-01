@@ -6,11 +6,11 @@ var Config = {
 
     // default user-configs
     userConfig: {
-        userSession: {
-            minutes: 0,
-            seconds: 30
-        },
-        pwGeneratorConfig: {
+	    export: {
+		    //
+			exportConfigs: false
+	    },
+	    pwGeneratorConfig: {
             // länge des passworts
             length: 8,
             // sonderzeichen
@@ -19,14 +19,18 @@ var Config = {
             numbers: true,
             // großbuchstaben
             capitals: true
+        },
+        userSession: {
+            minutes: 0,
+            seconds: 30
         }
-
     },
 
 
     init: function() {
         this._templates.generator = $('#generator-config-template').text();
         this._templates.timeout   = $('#timeout-config-template').text();
+        this._templates.export    = $('#export-config-template').text();
 
         for ( var config in this.userConfig ){
             if( this.userConfig.hasOwnProperty(config) ){
@@ -44,6 +48,14 @@ var Config = {
         $('#overlay').show();
     },
 
+	updateMainConfig: function(){
+		var secs = parseInt(this.userConfig.userSession.seconds),
+			mins = parseInt(this.userConfig.userSession.minutes),
+			interv = (secs + mins * 60);
+		Main.config.userSession = interv;
+		Main.updateSessionInterval();
+	},
+
     hideOverlay: function() {
         // pwConfigs
         if( this._currentOverlay === "#pw-generator-config" ){
@@ -55,11 +67,7 @@ var Config = {
 
         // timeoutConfigs
         if( this._currentOverlay === "#timeout-config" ){
-            var secs = parseInt(this.userConfig.userSession.seconds),
-                mins = parseInt(this.userConfig.userSession.minutes),
-                interv = (secs + mins * 60);
-            Main.config.userSession = interv;
-            Main.updateSessionInterval();
+            this.updateMainConfig();
             Storage.setPropToStorage('userSession', this.userConfig.userSession);
         }
 
@@ -72,6 +80,24 @@ var Config = {
         this.userConfig[ this._currentConfig ][ specificConfig ] = !bool;
     },
 
+
+	//export
+	showExportConfigs: function(){
+		var divId   = '#export-config',
+			data    = this._templates.export,
+			tpl     = new jSmart( data ),
+			newHtml = tpl.fetch( this.userConfig.pwGeneratorConfig );
+		console.log( Storage.getStorage() )
+		$( divId ).html( newHtml );
+		this._currentOverlay = divId;
+		this._currentConfig = "export";
+		this.showDialog( divId, "Passwörter exportieren");
+	},
+
+
+
+
+	//PW
     showPwGeneratorConfigs: function() {
         var divId   = '#pw-generator-config',
             data    = this._templates.generator,
@@ -96,6 +122,8 @@ var Config = {
     },
 
 
+
+	//Timeout
     showTimeoutConfigs: function() {
         var divId   = '#timeout-config',
             data    = this._templates.timeout,

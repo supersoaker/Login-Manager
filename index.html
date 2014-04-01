@@ -48,7 +48,26 @@
         </div>
         <div class="clearfix"></div>
         <div id="overlay-wrapper">
-            <div id="timeout-configpw-generator-config">
+            <div id="export-config">
+                <script id="export-config-template" type="text/x-jsmart-tmpl">
+                    <ul class="list-group">
+                        <li class="list-group-item">
+                            <label>
+                                <input onclick="Config.triggerConfig(this.name)" name="exportConfigs" type="checkbox" />
+                                Einstellungen mit exportieren
+                            </label>
+                        </li>
+                        <li class="list-group-item">
+                            <label>
+                                Zum Verschicken der Passwörter per Mail bitte
+                                <a href="mailto:?subject=Hallo%20Fritz,%20hallo%20Heidi&body=Hallo%20Fritz,%0D%0A%0D%0Aich%20wollte%20nur%20sagen,%20dass%20">hier klicken</a>
+                            </label>
+                        </li>
+                    </ul>
+                </script>
+            </div>
+
+            <div id="pw-generator-config">
                 <script id="generator-config-template" type="text/x-jsmart-tmpl">
                     <p>
                         Geben Sie hier Ihre Konfigurationen zum Generieren eines Passwortes an:
@@ -122,7 +141,7 @@
     <div id="config-div">
         <ul class="nav nav-pills nav-stacked">
             <li><a href="#">Passwörter importieren</a></li>
-            <li><a href="#">Passwörter exportieren</a></li>
+            <li><a onclick="Config.showExportConfigs()" href="#">Passwörter exportieren</a></li>
             <li><a onclick="Config.showPwGeneratorConfigs()" href="#">Passwort-Generator</a></li>
             <li><a onclick="Config.showTimeoutConfigs()" href="#">Sitzungsablauf</a></li>
         </ul>
