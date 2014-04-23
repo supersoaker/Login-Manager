@@ -53,15 +53,18 @@
                     <ul class="list-group">
                         <li class="list-group-item">
                             <label>
-                                <input onclick="Config.triggerConfig(this.name)" name="exportConfigs" type="checkbox" />
+                                <input onclick="Config.triggerConfig(this.name); Config.updateExport()" name="exportConfigs" type="checkbox" />
                                 Einstellungen mit exportieren
                             </label>
                         </li>
                         <li class="list-group-item">
                             <label>
                                 Zum Verschicken der Passwörter per Mail bitte
-                                <a href="mailto:?subject=Hallo%20Fritz,%20hallo%20Heidi&body=Hallo%20Fritz,%0D%0A%0D%0Aich%20wollte%20nur%20sagen,%20dass%20">hier klicken</a>
+                                <a id="mail-link" href="mailto:?subject=Hallo%20Fritz,%20hallo%20Heidi&body=Hallo%20Fritz,%0D%0A%0D%0Aich%20wollte%20nur%20sagen,%20dass%20">hier klicken</a>
                             </label>
+                        </li>
+                        <li class="list-group-item">
+                            <textarea name="" id="export-string-field"></textarea>
                         </li>
                     </ul>
                 </script>
@@ -123,12 +126,12 @@
                         <li class="list-group-item">
                             <label>
                                 Minuten:
-                                <input style="margin-left: 23px;" step="any" type="number" id="timeout-min-input" max="15" min="0" onkeyup="Config.updateTimeout('minutes', this.value)" value="{$minutes}" />
+                                <input style="margin-left: 23px;" step="any" type="number" id="timeout-min-input" max="15" min="0" onchange="Config.updateTimeout('minutes', this.value)" value="{$minutes}" />
                             </label>
                             <br />
                             <label>
                                 Sekunden:
-                                <input step="any" type="number" id="timeout-sec-input" max="60" min="0" onkeyup="Config.updateTimeout('seconds', this.value)" value="{$seconds}" />
+                                <input step="any" type="number" id="timeout-sec-input" max="60" min="0" onchange="Config.updateTimeout('seconds', this.value)" value="{$seconds}" />
                             </label>
                         </li>
                     </ul>
@@ -141,7 +144,7 @@
     <div id="config-div">
         <ul class="nav nav-pills nav-stacked">
             <li><a href="#">Passwörter importieren</a></li>
-            <li><a onclick="Config.showExportConfigs()" href="#">Passwörter exportieren</a></li>
+            <li><a onclick="Config.showExportConfigs(); Config.updateExport()" href="#">Passwörter exportieren</a></li>
             <li><a onclick="Config.showPwGeneratorConfigs()" href="#">Passwort-Generator</a></li>
             <li><a onclick="Config.showTimeoutConfigs()" href="#">Sitzungsablauf</a></li>
         </ul>

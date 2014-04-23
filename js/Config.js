@@ -65,6 +65,7 @@ var Config = {
             Storage.setPropToStorage('pwGeneratorConfig', this.userConfig.pwGeneratorConfig);
         }
 
+
         // timeoutConfigs
         if( this._currentOverlay === "#timeout-config" ){
             this.updateMainConfig();
@@ -81,12 +82,14 @@ var Config = {
     },
 
 
+
+
 	//export
 	showExportConfigs: function(){
 		var divId   = '#export-config',
 			data    = this._templates.export,
 			tpl     = new jSmart( data ),
-			newHtml = tpl.fetch( this.userConfig.pwGeneratorConfig );
+			newHtml = tpl.fetch( clone( this.userConfig.pwGeneratorConfig ) );
 		console.log( Storage.getStorage() )
 		$( divId ).html( newHtml );
 		this._currentOverlay = divId;
@@ -94,7 +97,17 @@ var Config = {
 		this.showDialog( divId, "Passwörter exportieren");
 	},
 
-
+    updateExport: function() {
+        var exportString = '';
+        var storage = Storage.getStorage();
+        delete storage.passwordHash;
+        if( !this.userConfig.export.exportConfigs ){
+            storage = {  logins: storage.logins  };
+        }
+        var storageString = JSON.stringify( storage );
+        $('#mail-link').attr('href', 'mailto:?subject=Passw%C3%B6rter%20exportieren&body='+ storageString);
+        $('#export-string-field').text( storageString );
+    },
 
 
 	//PW
@@ -102,7 +115,7 @@ var Config = {
         var divId   = '#pw-generator-config',
             data    = this._templates.generator,
             tpl     = new jSmart( data ),
-            newHtml = tpl.fetch( this.userConfig.pwGeneratorConfig );
+            newHtml = tpl.fetch( clone( this.userConfig.pwGeneratorConfig ) );
         $( divId ).html( newHtml );
         this._currentOverlay = divId;
         this._currentConfig = "pwGeneratorConfig";
@@ -128,7 +141,7 @@ var Config = {
         var divId   = '#timeout-config',
             data    = this._templates.timeout,
             tpl     = new jSmart( data ),
-            newHtml = tpl.fetch( this.userConfig.userSession );
+            newHtml = tpl.fetch( clone( this.userConfig.userSession ) );
 
         $( divId ).html( newHtml );
         this._currentOverlay = divId;
@@ -138,10 +151,10 @@ var Config = {
 
     updateTimeout: function( action, num ) {
         if( action === "seconds" ){
-            this.userConfig.userSession.seconds = num;
+            this.userConfig.userSession.seconds = parseInt( num );
         } else
         if ( action === "minutes" ) {
-            this.userConfig.userSession.minutes = num;
+            this.userConfig.userSession.minutes = parseInt( num );
         }
     },
 

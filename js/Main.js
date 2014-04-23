@@ -3,7 +3,9 @@
 var init = function() {
     Main.init();
 };
-
+var clone = function( obj ) {
+    return $.extend({}, obj);
+};
 
 var Main = {
 
@@ -17,25 +19,34 @@ var Main = {
 
 
     init: function() {
-		Config.updateMainConfig();
-        this._startSessionInterval();
         this._checkIfStorageContainsPassword();
         this.naviStructure = $('#navi-template').text();
 
-        $('.content').css( 'height', (window.innerHeight - 50) );
-//        $('body').css( 'width', (window.innerWidth - 40) );
-        $('#overlay').css( 'width', (window.innerWidth - 40) );
-        $('#overlay').css( 'height', (window.innerHeight - 40) );
+        this.onResize();
+        $(window).on('resize', this.onResize);
+
 
         PageHandler.init();
         Overview.init();
         NewLoginData.init();
         Config.init();
 
+		Config.updateMainConfig();
+        this._startSessionInterval();
+
         $('body').on('click', this.updateSessionInterval.bind(this));
 
         $('#savePassword').on('click', this._savePassword.bind(this));
         $('#submitPassword').on('click', this._checkIfPasswordIsCorrect.bind(this));
+    },
+
+    onResize: function() {
+        $('.content').css( 'height', (window.innerHeight - 50) );
+//        $('body').css( 'width', (window.innerWidth - 40) );
+        $('#overlay').css( 'width', (window.innerWidth - 40) );
+        if(window.innerHeight > 430){
+            $('#overlay').css( 'height', (window.innerHeight - 40) );
+        }
     },
 
     updateNavi: function( page, naviTitle ) {

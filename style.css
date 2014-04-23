@@ -53,6 +53,11 @@ i.required {
 #pw-generator-config input[type="range"] {
     /*margin: 0 0 10px;*/
 }
+#export-config #export-string-field {
+    width: 100%;
+    resize: vertical;
+    height: 150px;
+}
 input[type="number"] {
     width: 50px;
     margin-left: 10px;
