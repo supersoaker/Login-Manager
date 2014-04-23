@@ -36,6 +36,10 @@ var Config = {
         this._templates.export    = $('#export-config-template').text();
         this._templates.import    = $('#import-config-template').text();
 
+        this.useStorageConfigs();
+    },
+
+    useStorageConfigs: function() {
         for ( var config in this.userConfig ){
             if( this.userConfig.hasOwnProperty(config) ){
                 this.userConfig[ config ]
@@ -100,14 +104,43 @@ var Config = {
     },
     importLogins: function() {
         var importString = $('#import-string-field').val();
+        var importPassword = $('#import-password').val();
         try {
             var obj = JSON.parse( importString );
-            for (var key in obj) {
-                Storage.setPropToStorage( key, obj[key] );
-            }
         } catch (e) {
             return false;
         }
+        for (var key in obj) {
+            if( key == "logins" ){
+                var logins = Storage.getPropFromStorage( key, []);
+                logins.forEach(function( login, i ) {
+                    login = {
+                        id          : login.id,
+                        title       : login.title,
+                        username    : Cryptic.decrypt( login.username, importPassword ),
+                        email       : Cryptic.decrypt( login.email, importPassword ),
+                        password    : Cryptic.decrypt( login.password, importPassword ),
+                        description : Cryptic.decrypt( login.description, importPassword )
+                    };
+
+                    logins[i] = {
+                        id          : login.id,
+                        title       : login.title,
+                        username    : Cryptic.encrypt( login.username ),
+                        email       : Cryptic.encrypt( login.email ),
+                        password    : Cryptic.encrypt( login.password ),
+                        description : Cryptic.encrypt( login.description )
+                    };
+                });
+                if( !this.userConfig.import.replaceLogins ) {
+                    Storage.setPropToStorage( key, logins.concat( obj[key] ) );
+                }
+            } else {
+                Storage.setPropToStorage( key, obj[key] );
+            }
+        }
+        this.useStorageConfigs();
+        this.hideOverlay();
     },
 
 	//export
