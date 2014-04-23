@@ -6,6 +6,9 @@ var Config = {
 
     // default user-configs
     userConfig: {
+        import: {
+            replaceLogins: false
+        },
 	    export: {
 		    //
 			exportConfigs: false
@@ -31,6 +34,7 @@ var Config = {
         this._templates.generator = $('#generator-config-template').text();
         this._templates.timeout   = $('#timeout-config-template').text();
         this._templates.export    = $('#export-config-template').text();
+        this._templates.import    = $('#import-config-template').text();
 
         for ( var config in this.userConfig ){
             if( this.userConfig.hasOwnProperty(config) ){
@@ -82,7 +86,29 @@ var Config = {
     },
 
 
-
+    //import
+    showImportConfigs: function() {
+        var divId   = '#import-config',
+            data    = this._templates.import,
+            tpl     = new jSmart( data ),
+            newHtml = tpl.fetch( clone( this.userConfig.pwGeneratorConfig ) );
+        console.log( Storage.getStorage() )
+        $( divId ).html( newHtml );
+        this._currentOverlay = divId;
+        this._currentConfig = "import";
+        this.showDialog( divId, "Passwörter importieren");
+    },
+    importLogins: function() {
+        var importString = $('#import-string-field').val();
+        try {
+            var obj = JSON.parse( importString );
+            for (var key in obj) {
+                Storage.setPropToStorage( key, obj[key] );
+            }
+        } catch (e) {
+            return false;
+        }
+    },
 
 	//export
 	showExportConfigs: function(){
