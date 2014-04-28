@@ -124,7 +124,7 @@ var Config = {
                     };
 
                     logins[i] = {
-                        id          : login.id,
+                        id          : Storage.getPropFromStorage('logins', []).length +1 ,
                         title       : login.title,
                         username    : Cryptic.encrypt( login.username ),
                         email       : Cryptic.encrypt( login.email ),
@@ -132,9 +132,12 @@ var Config = {
                         description : Cryptic.encrypt( login.description )
                     };
                 });
-                if( !this.userConfig.import.replaceLogins ) {
-                    Storage.setPropToStorage( key, logins.concat( obj[key] ) );
+                if( this.userConfig.import.replaceLogins ) {
+                    Storage.setPropToStorage( key, obj["logins"] );
+                } else {
+                    Storage.setPropToStorage( key, logins.concat( obj["logins"] ) );
                 }
+                PageHandler.changePageTo('overview');
             } else {
                 Storage.setPropToStorage( key, obj[key] );
             }
@@ -149,7 +152,6 @@ var Config = {
 			data    = this._templates.export,
 			tpl     = new jSmart( data ),
 			newHtml = tpl.fetch( clone( this.userConfig.pwGeneratorConfig ) );
-		console.log( Storage.getStorage() )
 		$( divId ).html( newHtml );
 		this._currentOverlay = divId;
 		this._currentConfig = "export";
@@ -158,7 +160,7 @@ var Config = {
 
     updateExport: function() {
         var exportString = '';
-        var storage = Storage.getStorage();
+        var storage = clone( Storage.getStorage() );
         delete storage.passwordHash;
         if( !this.userConfig.export.exportConfigs ){
             storage = {  logins: storage.logins  };

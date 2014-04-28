@@ -79,6 +79,7 @@ var Storage = {
      * @param {*} value - the value which is going to be saved
      */
     setPropToStorage: function(prop, value) {
+        console.log( "setPropToStorage [ "+ prop +" ]" )
         this._cache[prop] = value;
         this._updateStorage();
     },
@@ -105,5 +106,7 @@ var Storage = {
      */
     getStorage: function() {
         return this._cache;
+    }, clearStorage: function() {
+        localStorage.removeItem( this.storageName );
     }
 };

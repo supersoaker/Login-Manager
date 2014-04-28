@@ -34,7 +34,9 @@ var Main = {
 		Config.updateMainConfig();
         this._startSessionInterval();
 
-        $('body').on('click', this.updateSessionInterval.bind(this));
+        $('body').on('click', function () {
+            this.config.sessionSeconds = 0;
+        }.bind(this));
 
         $('#savePassword').on('click', this._savePassword.bind(this));
         $('#submitPassword').on('click', this._checkIfPasswordIsCorrect.bind(this));
@@ -90,8 +92,10 @@ var Main = {
      * @private
      */
     _startSessionInterval: function() {
+        console.log("start new interval")
         this.config.sessionInterval = setInterval( function(){
             this.config.sessionSeconds++;
+            console.log( this.config.userSession )
             if( this.config.sessionSeconds === this.config.userSession ){
                 this.resetApplication();
             }
@@ -129,7 +133,6 @@ var Main = {
         var password    = $('#passwordInput').val(),
             hash        = Cryptic.getHash(password),
             storageHash = Storage.getPropFromStorage('passwordHash');
-
         if( hash === storageHash ) {
             this.password = password;
             PageHandler.changePageTo('overview');
