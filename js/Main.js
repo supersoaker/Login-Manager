@@ -1,6 +1,7 @@
 'use strict';
 
 var init = function() {
+
     Main.init();
 };
 var clone = function( obj ) {
@@ -24,7 +25,6 @@ var Main = {
 
         this.onResize();
         $(window).on('resize', this.onResize);
-
 
         PageHandler.init();
         Overview.init();
@@ -70,6 +70,9 @@ var Main = {
      */
     _checkIfStorageContainsPassword: function() {
         var passwordIsSet = Storage.checkIfPasswordIsSet();
+        console.log( "passwordIsSet", passwordIsSet )
+        console.log( $('#passwordIsset') )
+        console.log( $('#passwordIsNull') )
         if( passwordIsSet ){
             $('#passwordIsset').show();
         } else {

@@ -28,8 +28,6 @@ var Overview = {
         setTimeout(function(){
             $('#content-wrapper').on('click', this.hideConfig);
         }.bind(this), 1000);
-//        alert(" TODO: edit config menu  ");
-        // TODO: edit config menu
     },
 
     updateOverviewPage: function(){

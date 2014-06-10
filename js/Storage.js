@@ -36,7 +36,8 @@ var Storage = {
         if( localStorage && localStorage.getItem(this.storageName) !== null ){
             var jsonString  = localStorage.getItem(this.storageName);
             this._cache     = JSON.parse(jsonString);
-            return true;
+//            console.log( "getPropStoage", this.getPropFromStorage('passwordHash') )
+            return !!this.getPropFromStorage('passwordHash');
         } else {
             return false;
         }
@@ -91,7 +92,7 @@ var Storage = {
      * @returns {*} - the variable from the storage
      */
     getPropFromStorage: function(prop, defaultParam) {
-        defaultParam = ( typeof defaultParam === "undefined" ) ? {} : defaultParam;
+        defaultParam = ( typeof defaultParam === "undefined" ) ? false : defaultParam;
         if(this._cache[prop]){
             return this._cache[prop];
         } else {

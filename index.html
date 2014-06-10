@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <!--<script src="plugins/plugin-loader.js"></script>-->
     <!--<meta name="viewport" content="width=device-width, user-scalable=no">-->
-    <meta name="viewport" content="width=device-width; initial-scale=1, maximum-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <!--<link rel="stylesheet" href="plugins/plugin-loader.css">-->
 
     <!--===== LIBRARIES =====-->
@@ -22,17 +22,6 @@
     <script type="text/javascript" src="js/NewLoginData.js"></script>
     <script type="text/javascript" src="js/Detail.js"></script>
     <script type="text/javascript" src="js/Config.js"></script>
-    <!--<script type="text/javascript" src="js/Main.js"></script>-->
-    <!--<script type="text/javascript" src="js/App/Utils/Storage.js"></script>-->
-    <!--<script type="text/javascript" src="js/App/Services/PageHandler.js"></script>-->
-    <!--<script type="text/javascript" src="js/App/Pages/Overview.js"></script>-->
-    <!--<script type="text/javascript" src="js/App/Pages/NewLoginData.js"></script>-->
-    <!--<script type="text/javascript" src="js/App/Pages/Detail.js"></script>-->
-    <script>
-        $(document).ready(init);
-
-    </script>
-
 
     <!--===== Styles =====-->
     <link rel="stylesheet" href="lib/bootstrap/css/bootstrap.min.css" />
@@ -203,7 +192,6 @@
         </div>
     </div>
 
-
     <!-- the content wrapper -->
     <div id="content-wrapper">
 
@@ -331,6 +319,14 @@
         </div>
 
     </div>
+
+    <script>
+        $(document).ready(function() {
+            console.log( 123 )
+            init();
+        });
+    </script>
+
 
 </body>
 </html>
